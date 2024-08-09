@@ -30,12 +30,12 @@ CREATE DATABASE book_db;
 ```
 ```sql
 CREATE TABLE books (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    year INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  author VARCHAR(255) NOT NULL,
+  year INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 ```
 
@@ -61,9 +61,9 @@ The server will start on http://localhost:8080.
 
 ### CRUD API Endpoints
 ##### Create a New Book
-Endpoint: POST /books
-Description: Adds a new book to the collection.
-Request Body:
+* Endpoint: POST /books
+* Description: Adds a new book to the collection.
+* Request Body:
 ```json
 {
 	"title": "Go Programming - From Beginner to Professional",
@@ -71,8 +71,8 @@ Request Body:
 	"year": 2024
 }
 ```
-Response:
-Success (201 Created):
+* Response:
+  * Success (201 Created):
 ```json
 {
 	"code": 201,
@@ -87,7 +87,7 @@ Success (201 Created):
 	}
 }
 ```
-Validation Error (422 Unprocessable Entity):
+  * Validation Error (422 Unprocessable Entity):
 ```json
 {
 	"code": 422,
@@ -102,10 +102,10 @@ Validation Error (422 Unprocessable Entity):
 ```
 
 ##### Get All Books
-Endpoint: GET /books
-Description: Retrieves a list of all books.
-Response:
-Success (200 OK)
+* Endpoint: GET /books
+* Description: Retrieves a list of all books.
+* Response:
+  * Success (200 OK)
 ```json
 {
 	"code": 200,
@@ -124,10 +124,10 @@ Success (200 OK)
 ```
 
 ##### Get a Book by ID
-Endpoint: GET /books/:id
-Description: Retrieves details of a book by its ID.
-Response:
-Success (200 OK):
+* Endpoint: GET /books/:id
+* Description: Retrieves details of a book by its ID.
+* Response:
+  * Success (200 OK):
 ```json
 {
 	"code": 200,
@@ -144,9 +144,9 @@ Success (200 OK):
 ```
 
 ##### Update a Book
-Endpoint: PUT /books/{id}
-Description: Updates the details of an existing book by its ID.
-Request Body:
+* Endpoint: PUT /books/{id}
+* Description: Updates the details of an existing book by its ID.
+* Request Body:
 ```json
 {
 	"title": "Go Programming - From Beginner to Professional",
@@ -154,8 +154,8 @@ Request Body:
 	"year": 2023
 }
 ```
-Response:
-Success (200 OK):
+* Response:
+  * Success (200 OK):
 ```json
 {
 	"code": 200,
@@ -170,7 +170,7 @@ Success (200 OK):
 	}
 }
 ```
-Not Found (404 Not Found):
+  * Not Found (404 Not Found):
 ```json
 {
 	"code": 404,
@@ -180,9 +180,9 @@ Not Found (404 Not Found):
 ```
 
 ##### Delete a Book
-Endpoint: DELETE /books/:id
-Description: Deletes a book by its ID.
-Response:
+* Endpoint: DELETE /books/:id
+* Description: Deletes a book by its ID.
+* Response:
 ```json
 {
 	"code": 200,
@@ -190,7 +190,7 @@ Response:
 	"data": null
 }
 ```
-Not Found (404 Not Found):
+  * Not Found (404 Not Found):
 ```json
 {
 	"code": 404,
