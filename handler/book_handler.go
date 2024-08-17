@@ -28,31 +28,32 @@ func (h *BookHandler) GetAllBooks(c *gin.Context) {
 		return
 	}
 
-	helper.SendSuccessResponse(c, http.StatusOK, "Successfully got all data", books)
-	log.Info().Msg("[BookHandler] Successfully got all data")
+	helper.SendSuccessResponse(c, http.StatusOK, "Successfully got all data.", books)
+	log.Info().Msg("[BookHandler] Successfully got all data.")
 }
 
 func (h *BookHandler) GetBookByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		log.Error().Err(err).Msg("[BookHandler] Failed to convert ID from URL")
-		helper.SendErrorResponse(c, http.StatusBadRequest, "ID must be a valid number", nil)
+		helper.SendErrorResponse(c, http.StatusBadRequest, "ID must be a valid number.", nil)
 		return
 	}
 
 	book, err := h.Service.GetBookByID(c.Request.Context(), id)
 	if err != nil {
-		log.Error().Err(err).Int("id", id).Msg("[BookHandler] Failed to get data")
 		if err.Error() == "errBookNotFound" {
-			helper.SendErrorResponse(c, http.StatusNotFound, "Data with that ID does not exist", nil)
+			log.Error().Err(err).Int("id", id).Msg("[BookHandler] Data with that ID does not exist.")
+			helper.SendErrorResponse(c, http.StatusNotFound, "Data with that ID does not exist.", nil)
 			return
 		}
+		log.Error().Err(err).Int("id", id).Msg("[BookHandler] Failed to get data")
 		helper.SendErrorResponse(c, http.StatusInternalServerError, "Failed to get data", nil)
 		return
 	}
 
-	helper.SendSuccessResponse(c, http.StatusOK, "Successfully got the data", book)
-	log.Info().Int("id", id).Msg("[BookHandler] Successfully got the data")
+	helper.SendSuccessResponse(c, http.StatusOK, "Successfully got the data.", book)
+	log.Info().Int("id", id).Msg("[BookHandler] Successfully got the data.")
 }
 
 func (h *BookHandler) CreateBook(c *gin.Context) {
@@ -64,17 +65,18 @@ func (h *BookHandler) CreateBook(c *gin.Context) {
 	}
 
 	if err := h.Service.CreateBook(c.Request.Context(), &book); err != nil {
-		log.Error().Err(err).Msg("[BookHandler] Failed to create data")
 		if err.Error() == "ErrBookExists" {
-			helper.SendErrorResponse(c, http.StatusBadRequest, "The book with the same title already exists", nil)
+			log.Error().Err(err).Msg("[BookHandler] The book with the same title already exists.")
+			helper.SendErrorResponse(c, http.StatusBadRequest, "The book with the same title already exists.", nil)
 			return
 		}
+		log.Error().Err(err).Msg("[BookHandler] Failed to create data")
 		helper.SendErrorResponse(c, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
 
 	helper.SendSuccessResponse(c, http.StatusCreated, "Successfully created data", book)
-	log.Info().Int("id", book.ID).Msg("[BookHandler] Successfully created data")
+	log.Info().Int("id", book.ID).Msgf("[BookHandler] Successfully created data %v", book)
 }
 
 func (h *BookHandler) UpdateBook(c *gin.Context) {
@@ -95,15 +97,17 @@ func (h *BookHandler) UpdateBook(c *gin.Context) {
 	book.ID = id
 
 	if err := h.Service.UpdateBook(c.Request.Context(), &book); err != nil {
-		log.Error().Err(err).Int("id", id).Msg("[BookHandler] Failed to update data.")
 		switch err.Error() {
 		case "errBookNotFound":
-			helper.SendErrorResponse(c, http.StatusNotFound, "Data with that ID does not exist, cannot update", nil)
+			log.Error().Err(err).Int("id", id).Msg("[BookHandler] Data with that ID does not exist, cannot update.")
+			helper.SendErrorResponse(c, http.StatusNotFound, "Data with that ID does not exist, cannot update.", nil)
 			return
 		case "errTheYearCannotBeInTheFuture":
-			helper.SendErrorResponse(c, http.StatusBadRequest, "Year of publication cannot be in the future, cannot update", nil)
+			log.Error().Err(err).Int("id", id).Msg("[BookHandler] Year of publication cannot be in the future, cannot update.")
+			helper.SendErrorResponse(c, http.StatusBadRequest, "Year of publication cannot be in the future, cannot update.", nil)
 			return
 		}
+		log.Error().Err(err).Int("id", id).Msg("[BookHandler] Failed to update data.")
 		helper.SendErrorResponse(c, http.StatusInternalServerError, err.Error(), nil)
 		return
 	}
@@ -121,15 +125,17 @@ func (h *BookHandler) DeleteBook(c *gin.Context) {
 	}
 
 	if err := h.Service.DeleteBook(c.Request.Context(), id); err != nil {
-		log.Error().Err(err).Int("id", id).Msg("[BookHandler] Failed to delete data.")
 		switch err.Error() {
 		case "errBookNotFound":
-			helper.SendErrorResponse(c, http.StatusNotFound, "Data with that ID does not exist, cannot deleted", nil)
+			log.Error().Err(err).Int("id", id).Msg("[BookHandler] Data with that ID does not exist, you cannot delete it.")
+			helper.SendErrorResponse(c, http.StatusNotFound, "Data with that ID does not exist, you cannot delete it.", nil)
 			return
 		case "errBooksOlderThan10Years":
-			helper.SendErrorResponse(c, http.StatusBadRequest, "Books older than 10 years cannot be deleted", nil)
+			log.Error().Err(err).Int("id", id).Msg("[BookHandler] Books older than 10 years cannot be deleted.")
+			helper.SendErrorResponse(c, http.StatusBadRequest, "Books older than 10 years cannot be deleted.", nil)
 			return
 		}
+		log.Error().Err(err).Int("id", id).Msg("[BookHandler] Failed to delete data.")
 		helper.SendErrorResponse(c, http.StatusInternalServerError, "Failed to delete data.", nil)
 		return
 	}

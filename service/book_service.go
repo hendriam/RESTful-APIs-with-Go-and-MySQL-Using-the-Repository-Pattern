@@ -8,6 +8,12 @@ import (
 	"time"
 )
 
+// Define the ErrBookExists error
+var ErrBookExists = errors.New("ErrBookExists")
+
+// Define the errBookNotFound error
+var errBookNotFound = errors.New("errBookNotFound")
+
 type BookService interface {
 	GetAllBooks(ctx context.Context) ([]models.Book, error)
 	GetBookByID(ctx context.Context, id int) (*models.Book, error)
@@ -36,7 +42,7 @@ func (s *bookService) GetBookByID(ctx context.Context, id int) (*models.Book, er
 	}
 
 	if book == nil {
-		return nil, errors.New("errBookNotFound")
+		return nil, errBookNotFound
 	}
 
 	return book, nil
@@ -49,7 +55,7 @@ func (s *bookService) CreateBook(ctx context.Context, book *models.Book) error {
 		return err
 	}
 	if len(existingBooks) > 0 {
-		return errors.New("ErrBookExists")
+		return ErrBookExists
 	}
 
 	// Set default values
@@ -67,7 +73,7 @@ func (s *bookService) UpdateBook(ctx context.Context, book *models.Book) error {
 	}
 
 	if existingBook == nil {
-		return errors.New("errBookNotFound")
+		return errBookNotFound
 	}
 
 	book.CreatedAt = existingBook.CreatedAt
@@ -89,7 +95,7 @@ func (s *bookService) DeleteBook(ctx context.Context, id int) error {
 	}
 
 	if existingBook == nil {
-		return errors.New("errBookNotFound")
+		return errBookNotFound
 	}
 
 	// For example, books older than 10 years should not be deleted
